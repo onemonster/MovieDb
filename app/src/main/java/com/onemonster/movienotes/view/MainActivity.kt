@@ -1,7 +1,8 @@
-package com.onemonster.movienotes
+package com.onemonster.movienotes.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.onemonster.movienotes.R
 
 class MainActivity : AppCompatActivity() {
 
