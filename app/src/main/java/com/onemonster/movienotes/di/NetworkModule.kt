@@ -10,13 +10,23 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Singleton
 
 @Module
-class NetworkModule(private val baseUrl: String) {
+class NetworkModule(private val apiKey: String) {
 
     @Provides
     @Singleton
     fun provideHttpClient(): OkHttpClient {
         return OkHttpClient.Builder()
             .addNetworkInterceptor(StethoInterceptor())
+            .addInterceptor { chain ->
+                val original = chain.request()
+                val url = original.url().newBuilder()
+                    .addQueryParameter("apikey", apiKey)
+                    .build()
+                val request = original.newBuilder()
+                    .url(url)
+                    .build()
+                chain.proceed(request)
+            }
             .build()
     }
 
@@ -25,7 +35,7 @@ class NetworkModule(private val baseUrl: String) {
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
             .client(okHttpClient)
-            .baseUrl(baseUrl)
+            .baseUrl("https://api.themoviedb.org/3")
             .addConverterFactory(MoshiConverterFactory.create())
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build()

@@ -25,7 +25,7 @@ class MovieNotesApplication : Application(), HasActivityInjector {
             Stetho.initializeWithDefaults(this)
         }
         DaggerAppComponent.builder()
-            .networkModule(NetworkModule(""))
+            .networkModule(NetworkModule(BuildConfig.TMDB_API_KEY))
             .preferenceModule(PreferenceModule(packageName))
             .build()
             .inject(this)
