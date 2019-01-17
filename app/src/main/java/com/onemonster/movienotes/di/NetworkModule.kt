@@ -1,6 +1,7 @@
 package com.onemonster.movienotes.di
 
 import com.facebook.stetho.okhttp3.StethoInterceptor
+import com.onemonster.movienotes.network.MovieService
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
@@ -20,7 +21,7 @@ class NetworkModule(private val apiKey: String) {
             .addInterceptor { chain ->
                 val original = chain.request()
                 val url = original.url().newBuilder()
-                    .addQueryParameter("apikey", apiKey)
+                    .addQueryParameter("api_key", apiKey)
                     .build()
                 val request = original.newBuilder()
                     .url(url)
@@ -35,9 +36,15 @@ class NetworkModule(private val apiKey: String) {
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
             .client(okHttpClient)
-            .baseUrl("https://api.themoviedb.org/3")
+            .baseUrl("https://api.themoviedb.org/3/")
             .addConverterFactory(MoshiConverterFactory.create())
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideMovieService(retrofit: Retrofit): MovieService {
+        return retrofit.create(MovieService::class.java)
     }
 }
