@@ -1,6 +1,8 @@
 package com.onemonster.movienotes.di
 
+import android.app.Application
 import com.onemonster.movienotes.MovieNotesApplication
+import dagger.BindsInstance
 import dagger.Component
 import dagger.android.AndroidInjectionModule
 import dagger.android.AndroidInjector
@@ -24,6 +26,9 @@ interface AppComponent : AndroidInjector<MovieNotesApplication> {
 
     @Component.Builder
     interface Builder {
+        @BindsInstance
+        fun application(application: Application): Builder
+
         fun preferenceModule(preferenceModule: PreferenceModule): Builder
         fun networkModule(networkModule: NetworkModule): Builder
         fun build(): AppComponent

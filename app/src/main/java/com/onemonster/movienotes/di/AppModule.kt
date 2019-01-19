@@ -1,7 +1,7 @@
 package com.onemonster.movienotes.di
 
+import android.app.Application
 import android.content.Context
-import com.onemonster.movienotes.MovieNotesApplication
 import dagger.Module
 import dagger.Provides
 
@@ -9,7 +9,7 @@ import dagger.Provides
 class AppModule {
 
     @Provides
-    fun provideContext(application: MovieNotesApplication): Context {
+    fun provideContext(application: Application): Context {
         return application
     }
 }
