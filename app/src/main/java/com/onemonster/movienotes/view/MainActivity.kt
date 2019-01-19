@@ -2,6 +2,8 @@ package com.onemonster.movienotes.view
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import com.onemonster.movienotes.R
 import com.onemonster.movienotes.network.MovieService
 import dagger.android.AndroidInjection
@@ -15,6 +17,10 @@ class MainActivity : AppCompatActivity() {
 
     @Inject
     lateinit var movieService: MovieService
+
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+    private val viewModel by lazy { ViewModelProviders.of(this, viewModelFactory)[MainActivityViewModel::class.java] }
 
     val compositeDisposable = CompositeDisposable()
 

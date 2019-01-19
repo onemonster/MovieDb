@@ -16,7 +16,8 @@ import javax.inject.Singleton
         ActivityModule::class,
         AppModule::class,
         NetworkModule::class,
-        PreferenceModule::class
+        PreferenceModule::class,
+        ViewModelModule::class
     ]
 )
 interface AppComponent : AndroidInjector<MovieNotesApplication> {
