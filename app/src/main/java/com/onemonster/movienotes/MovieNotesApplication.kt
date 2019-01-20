@@ -6,6 +6,7 @@ import com.facebook.stetho.Stetho
 import com.onemonster.movienotes.di.DaggerAppComponent
 import com.onemonster.movienotes.di.NetworkModule
 import com.onemonster.movienotes.di.PreferenceModule
+import com.squareup.leakcanary.LeakCanary
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasActivityInjector
@@ -21,6 +22,9 @@ class MovieNotesApplication : Application(), HasActivityInjector {
     override fun onCreate() {
         super.onCreate()
         if (BuildConfig.DEBUG) {
+            if (LeakCanary.isInAnalyzerProcess(this)) return
+            LeakCanary.install(this)
+
             Timber.plant(Timber.DebugTree())
             Stetho.initializeWithDefaults(this)
         }

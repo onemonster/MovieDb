@@ -28,7 +28,9 @@ class PreferenceModule(private val name: String) {
     @Provides
     @Singleton
     fun provideDatabase(applicationContext: Context): AppDatabase {
-        return Room.databaseBuilder(applicationContext, AppDatabase::class.java, "MovieNotes.db").build()
+        return Room.databaseBuilder(applicationContext, AppDatabase::class.java, "MovieNotes.db")
+            .allowMainThreadQueries()
+            .build()
     }
 
     @Provides

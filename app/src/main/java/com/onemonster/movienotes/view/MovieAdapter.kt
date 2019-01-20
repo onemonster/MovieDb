@@ -3,6 +3,7 @@ package com.onemonster.movienotes.view
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.bumptech.glide.Glide
 import com.onemonster.movienotes.R
 import com.onemonster.movienotes.base.BaseAdapter
 import com.onemonster.movienotes.base.BaseViewHolder
@@ -20,6 +21,7 @@ class MovieAdapter : BaseAdapter<Movie, MovieAdapter.MovieViewHolder>() {
     class MovieViewHolder(view: View) : BaseViewHolder<Movie>(view) {
         override fun bind(data: Movie, position: Int) {
             view.text_title.text = data.title
+            Glide.with(view).load(data.posterUrl).into(view.image_poster)
         }
     }
 }

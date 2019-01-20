@@ -15,6 +15,7 @@ class MovieRepository @Inject constructor(
     private val movieDao: MovieDao,
     private val movieService: MovieService
 ) {
+
     fun getMovies(page: Int, storeResult: Boolean): Observable<PagedResource<List<Movie>>> =
         object : NetworkBoundResource<List<Movie>, PagedResponse<Movie>>() {
 
@@ -24,15 +25,17 @@ class MovieRepository @Inject constructor(
                     .doOnNext { Timber.d("Dispatching ${it.size} users from DB...") }
 
             override fun fetchFromService(): Observable<PagedResponse<Movie>> =
-                movieService.fetchDiscoverMovie(page).doOnNext { Timber.d("__ FETCH FROM SERVICE $it") }
+                movieService.fetchDiscoverMovie(page)
 
             override fun mapResponseTypeToResultType(responseType: PagedResponse<Movie>): List<Movie> =
-                responseType.results
+                responseType.results.map { it.copy(page = responseType.page) }
 
             override fun mapResponseTypeToIsLastPage(responseType: PagedResponse<Movie>): Boolean =
                 responseType.isLast
 
-            override fun storeInDb(data: List<Movie>) = movieDao.insert(data)
+            override fun storeInDb(data: List<Movie>) {
+                movieDao.insert(data)
+            }
 
             override fun shouldStoreResult(): Boolean = storeResult
         }.asObservable()

@@ -5,6 +5,7 @@ import com.onemonster.movienotes.model.PagedResource
 import com.onemonster.movienotes.model.toErrorResponse
 import io.reactivex.Observable
 import retrofit2.HttpException
+import kotlin.concurrent.thread
 
 abstract class NetworkBoundResource<ResultType, ResponseType> {
     private var result: Observable<PagedResource<ResultType>>
@@ -22,6 +23,9 @@ abstract class NetworkBoundResource<ResultType, ResponseType> {
                 .subscribe({
                     mapResponseTypeToResultType(it).let { result ->
                         data = result
+                        thread {
+                            storeInDb(result)
+                        }
                         emitter.onNext(
                             PagedResource.success(
                                 result,
@@ -29,8 +33,6 @@ abstract class NetworkBoundResource<ResultType, ResponseType> {
                             )
                         )
                         emitter.onComplete()
-                        // Store might not be working...
-                        storeInDb(result)
                     }
                 }) { t ->
                     (t as? HttpException)?.toErrorResponse()?.let { error ->

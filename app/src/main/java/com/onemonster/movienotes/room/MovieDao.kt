@@ -8,7 +8,7 @@ import io.reactivex.Single
 @Dao
 interface MovieDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(movies: List<Movie>)
+    fun insert(movies: List<Movie>): List<Long>
 
     @Update
     fun update(movie: Movie): Completable
